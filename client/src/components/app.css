@@ -1,0 +1,35 @@
+body{
+    margin: 0px;
+}
+.div-table {
+  width: 90%;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+.title{
+    padding: 13px;
+    background-color: #FE5C5E;
+    color: white;
+    font-size: 21px;
+}
+
+.div-table-header,
+.div-table-row {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+}
+
+.div-table-cell {
+  flex: 1;
+  padding: 5px;
+}
+
+.div-table-header {
+  font-weight: bold;
+}
+
+.div-table-row:nth-child(even) {
+  background-color: #f2f2f2;
+}
