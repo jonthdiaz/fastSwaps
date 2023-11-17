@@ -1,17 +1,18 @@
+const port = process.env.PORT || 3000
 const path = require('path')
-const filesRoute = require('./routes')
+const apiRoutes = require('./routes')
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 3000
+const mongoose = require('mongoose');
 
-app.use(express.static('public'))
-app.use(express.static('client/dist'))
+mongoose.connect('mongodb://localhost:27017/fastChange', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-app.use('/files', filesRoute)
-
-app.use('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/public/index.html'))
-})
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use('/api', apiRoutes)
 
 const server = app.listen(port, () => {
   const { address, port } = server.address()

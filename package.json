@@ -4,16 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && nodemon app/app.js",
-    "build": "webpack --mode production",
+    "start": "nodemon app/app.js",
     "test": "mocha tests"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ethers": "^6.8.1",
     "express": "^4.18.2",
     "http-status-codes": "^2.2.0",
+    "mongoose": "^8.0.1",
     "nodemon": "^2.0.22",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
