@@ -161,8 +161,6 @@ const { id: quoteId, quote } = await fetch(
     }),
   },
 ).then((response) => response.json());
-console.log("quote:", quoteId, quote);
-
 const orderData = {
   ...orderConfig,
   sellAmount: quote.sellAmount,
@@ -214,6 +212,7 @@ const orderUid = await fetch(
     }),
   },
 ).then((response) => response.json());
+console.log("Order id", orderUid)
 return orderUid
 }
 

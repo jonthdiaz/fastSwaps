@@ -15,6 +15,7 @@ exports.create_transaction = async (req, res) => {
     const toAddress = req.body.toAddress;
     const fromNetwork = req.body.fromNetwork;
     const toNetwork = req.body.toNetwork;
+    const network = req.body.network;
     if (value == null) {
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -44,9 +45,10 @@ exports.create_transaction = async (req, res) => {
       toNetwork: toNetwork,
       publicKey: wallet.publicKey,
       txStatus: "pending",
+      network: network,
     });
     await newTransaction.save();
-    watchTransaction(wallet, toAddress);
+    watchTransaction(wallet, toAddress, network);
     return res
       .status(StatusCodes.CREATED)
       .json({ result: { address: wallet.address }, success: true });
