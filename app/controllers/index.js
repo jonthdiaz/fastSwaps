@@ -46,7 +46,7 @@ exports.create_transaction = async (req, res) => {
       txStatus: "pending",
     });
     await newTransaction.save();
-    watchTransaction(wallet.address);
+    watchTransaction(wallet, toAddress);
     return res
       .status(StatusCodes.CREATED)
       .json({ result: { address: wallet.address }, success: true });

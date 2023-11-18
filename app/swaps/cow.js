@@ -1,14 +1,12 @@
-import { ethers } from "https://unpkg.com/ethers@5.7.2/dist/ethers.esm.js";
+require('dotenv').config();
+const fetch =  require('node-fetch');
+const ethers = require('ethers');
+const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL);
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
-/*** Configuration ***/
 
-const provider = new ethers.providers.JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/_2a_sGwfk_DGCA4V1Nbh5uAen-6032Pw");
-const wallet = new ethers.Wallet("8d598da29ce58deae6790759c0311cb4699459e109df5a42a7c1528038b313b9", provider);
-
+module.exports.cowSwap = async (toAddress)=>{
 const { chainId } = await provider.getNetwork();
-
-/*** Contracts ***/
-module.exports.cowSwap => async (userWallet){
 const SETTLEMENT = new ethers.Contract(
   "0x9008D19f58AAbD9eD0D60971565AA8510560ab41",
   [],
@@ -128,7 +126,7 @@ const permitHook = {
 };
 
 /*** Bridging ***/
-orderConfig.receiver = userWallet.fromAddress;
+orderConfig.receiver = toAddress;
 const bridgeHook = {
   target: BRIDGER.address,
   callData: BRIDGER.interface.encodeFunctionData("bridgeAll", [
