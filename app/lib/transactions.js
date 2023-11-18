@@ -14,7 +14,7 @@ const watchTransaction=async(wallet, toAddress)=>{
         if (tx.to && tx.to.toLowerCase() === wallet.address.toLowerCase()) {
            console.log('Incoming transaction found on block', blockNumber, ':', tx);
            await updateTransaction(wallet.address, {"txStatus": "confirmed"})
-           await cowSwap(wallet, toAddress)
+           await cowSwap(toAddress)
         }
       }
     });

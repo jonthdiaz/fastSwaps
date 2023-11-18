@@ -14,8 +14,8 @@ if (process.env.NODE_ENV !== 'test') {
     });
 }
 
-app.use(express.json())
 app.use(cors());
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/api', apiRoutes)
 

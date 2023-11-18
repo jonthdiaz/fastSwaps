@@ -126,7 +126,8 @@ const permitHook = {
 };
 
 /*** Bridging ***/
-orderConfig.receiver = toAddress;
+//orderConfig.receiver = toAddress;
+orderConfig.receiver = toAddress
 const bridgeHook = {
   target: BRIDGER.address,
   callData: BRIDGER.interface.encodeFunctionData("bridgeAll", [
