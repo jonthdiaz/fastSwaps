@@ -11,7 +11,6 @@ const { add } = require("nodemon/lib/rules");
 
 exports.create_transaction = async (req, res) => {
   try {
-    const wallet = ethers.Wallet.createRandom();
     const value = req.body.value;
     const toAddress = req.body.toAddress;
     const fromNetwork = req.body.fromNetwork;
@@ -36,6 +35,7 @@ exports.create_transaction = async (req, res) => {
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: "Invalid parameter to network" });
     }
+    const wallet = ethers.Wallet.createRandom();
     const newTransaction = new transactionSchema({
       value: value,
       toAddress: toAddress,
