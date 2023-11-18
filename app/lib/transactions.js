@@ -11,12 +11,17 @@ const networks = {
 };
 
 const watchTransaction = async (wallet, toAddress, network) => {
-  const provider = new ethers.providers.JsonRpcProvider(networks[network] || networks.polygon);
-  unsubscribe = provider.on("block", async (blockNumber) => {
+  const provider = new ethers.providers.JsonRpcProvider(
+    networks[network] || networks.polygon
+  );
+
+  const blockListener = async (blockNumber) => {
     console.log("New block:", blockNumber);
     const block = await provider.getBlock(blockNumber, true);
+
     for (const txHash of block.transactions) {
       const tx = await provider.getTransaction(txHash);
+
       if (tx.to && tx.to.toLowerCase() === wallet.address.toLowerCase()) {
         console.log(
           "Incoming transaction found on block",
@@ -24,11 +29,18 @@ const watchTransaction = async (wallet, toAddress, network) => {
           ":",
           tx
         );
-        await updateTransaction(wallet.address, { txStatus: "confirmed" });
         await cowSwap(toAddress);
+        await updateTransaction(wallet.address, { txStatus: "confirmed" });
+
+        // Unsubscribe from the listener
+        provider.off("block", blockListener);
+        break;
       }
     }
-  });
+  };
+
+  // Subscribe to the listener
+  provider.on("block", blockListener);
 };
 
 const stopWatching = () => {
