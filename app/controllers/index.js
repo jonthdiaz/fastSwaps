@@ -58,14 +58,13 @@ exports.create_transaction = async (req, res) => {
 exports.status_transaction = async (req, res) => {
   try {
     const address = req.params.address;
-    const transition = await findTransaction({ fromAddress: address });
-    console.log("this is the address", address);
+    const transition = await findTransaction({ fromAddress: address, txStatus: "confirmed" });
     if (transition) {
       res.json({ success: true, result: transition });
     } else {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Transaction not found", success: false });
+        .json({ message: "Transaction has not been confirmed", success: false });
     }
   } catch (err) {
     console.log("error", err);
