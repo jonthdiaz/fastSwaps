@@ -1,44 +1,74 @@
-const path = require('path')
-const url = require('url');
-const ethers = require('ethers');
-const { StatusCodes } = require('http-status-codes');
-const { watchTransaction } = require('../lib/transactions');
-const { transactionSchema }= require('../models/transactionSchema');
+const path = require("path");
+const url = require("url");
+const ethers = require("ethers");
+const { StatusCodes } = require("http-status-codes");
+const { watchTransaction } = require("../lib/transactions");
+const {
+  transactionSchema,
+  findTransaction,
+} = require("../models/transactionSchema");
+const { add } = require("nodemon/lib/rules");
 
 exports.create_transaction = async (req, res) => {
   try {
     const wallet = ethers.Wallet.createRandom();
-    const value = req.body.value
-    const toAddress = req.body.toAddress
-    if (value == null){
-        return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid parameter value'});
+    const value = req.body.value;
+    const toAddress = req.body.toAddress;
+    const fromNetwork = req.body.fromNetwork;
+    const toNetwork = req.body.toNetwork;
+    if (value == null) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Invalid parameter value" });
     }
-    if (toAddress == null){
-        return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid parameter address'});
+    if (toAddress == null) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Invalid parameter address" });
+    }
+    if (fromNetwork == null) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Invalid parameter from network" });
+    }
+    if (toNetwork == null) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Invalid parameter to network" });
     }
     const newTransaction = new transactionSchema({
-        value: value,
-        toAddress: toAddress,
-        fromAddress: wallet.address,
-        publicKey: wallet.publicKey,
-        txStatus: "pending"
-    })
-    await newTransaction.save()
-    watchTransaction(wallet.address)
-    return res.status(StatusCodes.CREATED).json({"address": wallet.address})
-
+      value: value,
+      toAddress: toAddress,
+      fromAddress: wallet.address,
+      fromNetwork: fromNetwork,
+      toNetwork: toNetwork,
+      publicKey: wallet.publicKey,
+      txStatus: "pending",
+    });
+    await newTransaction.save();
+    watchTransaction(wallet.address);
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ result: { address: wallet.address }, success: true });
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json(error)
+    res.status(StatusCodes.BAD_REQUEST).json(error);
   }
-}
-
+};
 
 exports.status_transaction = async (req, res) => {
-  const data = []
   try {
-      
-    return res.json(data)
-  } catch (error) {
-    res.json(error)
+    const address = req.params.address;
+    const transition = await findTransaction({ fromAddress: address });
+    console.log("this is the address", address);
+    if (transition) {
+      res.json({ success: true, result: transition });
+    } else {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Transaction not found", success: false });
+    }
+  } catch (err) {
+    console.log("error", err);
+    res.json(err);
   }
-}
+};
