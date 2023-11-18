@@ -5,10 +5,13 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://mongo:27017/fastChange', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+
+if (process.env.NODE_ENV !== 'test') {
+    mongoose.connect('mongodb://mongo:27017/fastChange', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+}
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
