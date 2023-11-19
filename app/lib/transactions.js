@@ -13,6 +13,9 @@ const watchTransaction = async (wallet, toAddress, network, amount) => {
   const rpcNetwork=networks[network]
   console.log("rcpnetwork", rpcNetwork)
   console.log("network", network)
+  if (!!!network){
+      return
+  }
   const provider = new ethers.providers.JsonRpcProvider(
     rpcNetwork || networks.polygon
   );
