@@ -5,6 +5,7 @@ const { cowSwap } = require("../swaps/cow");
 let unsubscribe;
 
 const watchTransaction = async (wallet, toAddress, network, amount) => {
+    console.log("to address", toAddress)
     const networks = {
       polygon: process.env.POLYGON_URL,
       celo: process.env.CELO_URL,
