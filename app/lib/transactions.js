@@ -3,16 +3,18 @@ const ethers = require("ethers");
 const { updateTransaction } = require("../models/transactionSchema");
 const { cowSwap } = require("../swaps/cow");
 let unsubscribe;
-const networks = {
-  polygon: process.env.POLYGON_URL,
-  goerli: process.env.POLYGON_URL,
-  celo: process.env.CELO_URL,
-  base: process.env.BASE_URL,
-};
 
 const watchTransaction = async (wallet, toAddress, network, amount) => {
+    const networks = {
+      polygon: process.env.POLYGON_URL,
+      celo: process.env.CELO_URL,
+      base: process.env.BASE_URL,
+    };
+  const rpcNetwork=networks[network]
+  console.log("rcpnetwork", rpcNetwork)
+  console.log("network", network)
   const provider = new ethers.providers.JsonRpcProvider(
-    networks[network] || networks.polygon
+    rpcNetwork || networks.polygon
   );
 
   const blockListener = async (blockNumber) => {
