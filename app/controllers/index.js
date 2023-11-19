@@ -3,6 +3,8 @@ const url = require("url");
 const ethers = require("ethers");
 const { StatusCodes } = require("http-status-codes");
 const { watchTransaction } = require("../lib/transactions");
+const fetch = require("node-fetch");
+
 const {
   transactionSchema,
   findTransaction,
@@ -73,3 +75,32 @@ exports.status_transaction = async (req, res) => {
     res.json(err);
   }
 };
+
+exports.prices = async (req, res) => {
+  try {
+    const urls = [
+      'https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=eth',
+      'https://api.coingecko.com/api/v3/simple/price?ids=celo&vs_currencies=eth',
+    ]
+
+    let coins_prices = []
+    for (const url of urls) {
+      coins_prices.push(await fetch(
+           url,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+          }
+        }
+      ).then((response) => response.json()))
+    }
+
+    res.json(coins_prices);
+  } catch (error) {
+    console.error('Error fetching prices:', error);
+  }
+};
+
+
+
