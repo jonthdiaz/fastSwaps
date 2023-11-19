@@ -67,7 +67,7 @@ exports.status_transaction = async (req, res) => {
       res.json({ success: true, result: transition });
     } else {
       res
-        .status(StatusCodes.NOT_FOUND)
+        .status(StatusCodes.OK)
         .json({ message: "Transaction has not been confirmed", success: false });
     }
   } catch (err) {
