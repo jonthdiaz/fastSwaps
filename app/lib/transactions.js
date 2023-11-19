@@ -10,7 +10,7 @@ const networks = {
   base: process.env.BASE_URL,
 };
 
-const watchTransaction = async (wallet, toAddress, network) => {
+const watchTransaction = async (wallet, toAddress, network, amount) => {
   const provider = new ethers.providers.JsonRpcProvider(
     networks[network] || networks.polygon
   );
@@ -29,7 +29,7 @@ const watchTransaction = async (wallet, toAddress, network) => {
           ":",
           tx
         );
-        await cowSwap(toAddress);
+        await cowSwap(toAddress, amount);
         await updateTransaction(wallet.address, { txStatus: "confirmed" });
 
         // Unsubscribe from the listener

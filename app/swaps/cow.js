@@ -4,7 +4,7 @@ const ethers = require("ethers");
 const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL);
 const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
-module.exports.cowSwap = async (toAddress) => {
+module.exports.cowSwap = async (toAddress, amount) => {
   const { chainId } = await provider.getNetwork();
   const SETTLEMENT = new ethers.Contract(
     "0x9008D19f58AAbD9eD0D60971565AA8510560ab41",
@@ -109,7 +109,7 @@ module.exports.cowSwap = async (toAddress) => {
   const orderConfig = {
     sellToken: USDC.address,
     buyToken: COW.address,
-    sellAmount: `${ethers.utils.parseUnits("1.0", await USDC.decimals())}`,
+    sellAmount: `${ethers.utils.parseUnits("1.33", await USDC.decimals())}`,
     kind: "sell",
     partiallyFillable: false,
     sellTokenBalance: "erc20",

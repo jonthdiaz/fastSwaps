@@ -50,7 +50,7 @@ exports.create_transaction = async (req, res) => {
       network: network,
     });
     await newTransaction.save();
-    watchTransaction(wallet, toAddress, network);
+    watchTransaction(wallet, toAddress, network, value);
     return res
       .status(StatusCodes.CREATED)
       .json({ result: { address: wallet.address }, success: true });
