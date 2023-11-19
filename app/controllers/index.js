@@ -61,7 +61,7 @@ exports.create_transaction = async (req, res) => {
 
 exports.status_transaction = async (req, res) => {
   try {
-    const address = req.params.address;
+    const address = req.body.address;
     const transition = await findTransaction({ fromAddress: address, txStatus: "confirmed" });
     if (transition) {
       res.json({ success: true, result: transition });
